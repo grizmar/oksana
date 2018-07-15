@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,31 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(
+    [
+        'prefix' => 'v1',
+        'middleware' => ['rest_api']
+    ],
+    function() {
+        Route::resource(
+            '/test/{id}',
+            'BaseRestController',
+            [
+                'only'=> ['show', 'index'],
+                'names' => [
+                    'show' => 'test.show',
+                    'index' => 'test.index',
+                ]
+            ]
+        );
+    }
+);
+
+//Route::group(array('prefix' => 'v1'), function () {
+//
+//    Route::get('user', function () {
+//        //
+//    });
+//
+//});
