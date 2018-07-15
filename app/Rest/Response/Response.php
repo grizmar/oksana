@@ -61,9 +61,6 @@ class Response implements ContentInterface
 
     public function jsonSerialize()
     {
-        phpinfo();die();
-        $this->addError('hello', 'hello');
-
         return [
             'errors' => $this->getErrors(),
             'data' => $this->data,
