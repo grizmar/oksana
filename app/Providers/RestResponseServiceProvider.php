@@ -3,33 +3,43 @@
 namespace App\Providers;
 
 use App\Rest\Response\ContentInterface;
+use App\Rest\Response\JsonResponse;
+use App\Rest\Response\XmlResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class RestResponseServiceProvider extends ServiceProvider
 {
+    public const CONTENT_TYPE_JSON = 'application/json';
+    public const CONTENT_TYPE_XML = 'application/xml';
+
     /**
      * Bootstrap the application services.
      *
+     * @param Request $request
      * @return void
      */
-    public function boot()
+    public function boot(Request $request): void
     {
-        $this->app->bind(ContentInterface::class, \App\Rest\Response\Response::class);
 
-        Response::macro('rest', function ($data, $status = HttpResponse::HTTP_OK) {
+        $this->bindResponse($request);
+
+        Response::macro('rest', function ($data, $status = false) {
             if($data instanceof ContentInterface){
                 $response = $data;
             }
             else{
                 $response = resolve(ContentInterface::class);
-                $response
-                    ->setData($data)
-                    ->setStatusCode($status);
+                $response->setData($data);
             }
 
-            return Response::json($response, $response->getStatusCode());
+            if($status){
+                $response->setStatusCode($status);
+            }
+
+            return $response->getAnswer();
         });
     }
 
@@ -41,5 +51,24 @@ class RestResponseServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    private function bindResponse(Request $request): void
+    {
+        $contentType = $request->header('Content-type') ?: self::CONTENT_TYPE_JSON;
+
+        switch($contentType) {
+            case self::CONTENT_TYPE_JSON:
+                $responseClass = JsonResponse::class;
+                break;
+            case self::CONTENT_TYPE_XML:
+                $responseClass = XmlResponse::class;
+                break;
+            default:
+                $responseClass = JsonResponse::class;
+                break;
+        }
+
+        $this->app->bind(ContentInterface::class, $responseClass);
     }
 }

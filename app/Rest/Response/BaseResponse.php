@@ -3,34 +3,34 @@ namespace App\Rest\Response;
 
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-class Response implements ContentInterface
+class BaseResponse implements ContentInterface
 {
-    private $data = [];
+    protected $data = [];
 
-    private $errors = [];
+    protected $errors = [];
 
-    private $status = HttpResponse::HTTP_OK;
+    protected $status = HttpResponse::HTTP_OK;
 
     public function getData(): array
     {
         return $this->data;
     }
 
-    public function setData(array $data): Response
+    public function setData(array $data): self
     {
         $this->data = $data;
 
         return $this;
     }
 
-    public function appendData(array $data): Response
+    public function appendData(array $data): self
     {
         $this->data = array_merge($this->data, $data);
 
         return $this;
     }
 
-    public function addError(int $code, string $message): Response
+    public function addError(int $code, string $message): self
     {
         $this->errors[$code] = $message;
 
@@ -44,7 +44,7 @@ class Response implements ContentInterface
 
     public function isSetErrors(): bool
     {
-        return (!empty($this->errors));
+        return !empty($this->errors);
     }
 
     public function getStatusCode(): int
@@ -52,19 +52,24 @@ class Response implements ContentInterface
         return $this->status;
     }
 
-    public function setStatusCode(int $code): Response
+    public function setStatusCode(int $code): self
     {
         $this->status = $code;
 
         return $this;
     }
 
-    public function jsonSerialize()
+    public function getAnswer()
+    {
+        return \response($this->getMap(), $this->getStatusCode());
+    }
+
+    public function getMap(): array
     {
         return [
-            'errors' => $this->getErrors(),
-            'data' => $this->data,
             'status' => $this->getStatusCode(),
+            'errors' => $this->getErrors(),
+            'data'   => $this->data,
         ];
     }
 }
