@@ -42,7 +42,7 @@ class BaseResponse implements ContentInterface
         return $this->errors;
     }
 
-    public function isSetErrors(): bool
+    public function hasErrors(): bool
     {
         return !empty($this->errors);
     }

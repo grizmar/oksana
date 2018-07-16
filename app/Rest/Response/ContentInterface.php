@@ -13,7 +13,7 @@ interface ContentInterface
 
     public function getStatusCode(): int;
 
-    public function isSetErrors(): bool;
+    public function hasErrors(): bool;
 
     public function getErrors(): array;
 
