@@ -2,12 +2,9 @@
 
 namespace App\Exceptions;
 
-use App\Rest\Response\ContentInterface;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Psy\Exception\FatalErrorException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use App\Rest\Exceptions\Handler as RestHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -52,24 +49,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        //TODO нужно либо сделать возфможность переопределять Handler либо вынести обработку ошибок api в отдельный
-        // класс
-
-        $response = resolve(ContentInterface::class);
-        if ($exception instanceof NotFoundException) {
-            $response
-                ->addError($exception->getCode(), $exception->getMessage())
-                ->setStatusCode(HttpResponse::HTTP_NOT_FOUND);
-
-            return response()->rest($response);
-        } elseif($exception instanceof \Exception) {
-            $response
-                ->addError(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, HttpResponse::$statusTexts[HttpResponse::HTTP_INTERNAL_SERVER_ERROR])
-                ->setStatusCode(HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
-
-            return response()->rest($response);
+        if ($request->is('api/*')) {
+            return RestHandler::resolve($request, $exception);
         }
-
 
         return parent::render($request, $exception);
     }
