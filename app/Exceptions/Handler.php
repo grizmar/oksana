@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($request->is('api/*')) {
-            return RestHandler::resolve($request, $exception);
+            return RestHandler::resolve($exception);
         }
 
         return parent::render($request, $exception);

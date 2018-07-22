@@ -2,32 +2,34 @@
 
 namespace App\Rest\Exceptions;
 
-use Illuminate\Http\Request;
 use App\Rest\Base\CodeRegistry as CR;
 use App\Rest\Response\ContentInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class Handler
 {
-    public static function resolve(Request $request, \Exception $e)
+    public static function resolve(\Exception $e)
     {
-        $response = resolve(ContentInterface::class);
-
         report($e); // log exception
 
-        if ($e instanceof HttpException) {
+        if ($e instanceof BaseRestException) {
 
-            $response
-                ->addError($e->getCode(), $e->getMessage())
-                ->setStatusCode($e->getCode());
+            $response = $e->getResponse();
 
-        } elseif ($e instanceof BaseRestException) {
+            if (empty($response)) {
+                $response = resolve(ContentInterface::class);
+            }
 
-            $response
-                ->addError($e->getCode(), $e->getMessage())
-                ->setStatusCode(HttpResponse::HTTP_OK);
+            if (!$e instanceof EmptyException) {
+                $response->addError($e->getCode(), $e->getMessage());
+            }
+
+            if ($e instanceof HttpException) {
+                $response->setStatusCode($e->getCode());
+            }
 
         } else {
+            $response = resolve(ContentInterface::class);
             $response
                 ->addError(
                     HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
