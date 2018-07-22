@@ -2,40 +2,44 @@
 
 namespace App\Rest\Exceptions;
 
-use App\Rest\Base\CodeRegistry as CR;
+use App\Rest\Base\CodeRegistry;
 use App\Rest\Base\ErrorCollection;
 use App\Rest\Response\ContentInterface;
 
 class BaseRestException extends \Exception
 {
-    private $response = null;
+    private $response;
 
-    public function __construct(int $code = 0, string $message = "", \Throwable $previous = null)
+    public function create(int $code = 0, ContentInterface $response = null)
     {
         $this->prepareCode($code);
 
-        // TODO: log incoming $message before map replace
+        $this->setResponse($response);
 
         $message = ErrorCollection::getMessageByCode($code);
 
-        parent::__construct($message, $code, $previous);
+        return new self($message, $code);
     }
 
-    public function addResponse(ContentInterface $response): self
+    public function setResponse(ContentInterface $response): self
     {
         $this->response = $response;
 
         return $this;
     }
 
-    public function getResponse()
+    public function getResponse(): ContentInterface
     {
+        if (empty($this->response)) {
+            $this->response = resolve(ContentInterface::class);
+        }
+
         return $this->response;
     }
 
     public static function getDefaultCode(): int
     {
-        return CR::INTERNAL_SERVER_ERROR;
+        return CodeRegistry::INTERNAL_SERVER_ERROR;
     }
 
     protected function prepareCode(int &$code): void

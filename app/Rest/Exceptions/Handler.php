@@ -2,13 +2,13 @@
 
 namespace App\Rest\Exceptions;
 
-use App\Rest\Base\CodeRegistry as CR;
+use Illuminate\Http\Request;
 use App\Rest\Response\ContentInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class Handler
 {
-    public static function resolve(\Exception $e)
+    public static function render(Request $request, \Exception $e)
     {
         report($e); // log exception
 
