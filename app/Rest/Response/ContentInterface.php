@@ -1,23 +1,37 @@
 <?php
 namespace App\Rest\Response;
 
-use JsonSerializable;
-
-interface ContentInterface extends JsonSerializable
+interface ContentInterface
 {
     public function getData(): array;
 
-    public function setData(array $data): Response;
+    public function setData(array $data);
 
-    public function appendData(array $data): Response;
+    public function addParam(string $code, $value);
 
-    public function setStatusCode(int $code): Response;
+    public function pushData(array $data);
+
+    public function setStatusCode(int $code);
 
     public function getStatusCode(): int;
 
-    public function isSetErrors(): bool;
+    public function hasErrors(): bool;
 
     public function getErrors(): array;
 
-    public function addError(int $code, string $message): Response;
+    public function addError(int $code, string $message);
+
+    public function addValidationError(string $code, string $message);
+
+    public function setValidationErrors(string $code, array $messages);
+
+    public function getValidationErrors(): array;
+
+    public function hasValidationErrors(): bool;
+
+    public function isValid(): bool;
+
+    public function getAnswer();
+
+    public function getMap(): array;
 }

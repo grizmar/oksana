@@ -25,14 +25,15 @@ Route::group(
     ],
     function() {
         Route::resource(
-            '/test/{id}',
+            '/test',
             'BaseRestController',
             [
-                'only'=> ['show', 'index'],
+                'only'  => ['show', 'index', 'update'],
                 'names' => [
-                    'show' => 'test.show',
-                    'index' => 'test.index',
-                ]
+                    'show'   => 'test.show',
+                    'index'  => 'test.index',
+                    'update' => 'test.update',
+                ],
             ]
         );
     }
