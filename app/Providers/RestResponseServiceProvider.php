@@ -66,7 +66,6 @@ class RestResponseServiceProvider extends ServiceProvider
                 break;
             default:
                 $responseClass = JsonResponse::class;
-                break;
         }
 
         $this->app->bind(ContentInterface::class, $responseClass);
