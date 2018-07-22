@@ -20,7 +20,7 @@ class Handler
                 $response = resolve(ContentInterface::class);
             }
 
-            if (!$e instanceof EmptyException) {
+            if (!($e instanceof EmptyException)) {
                 $response->addError($e->getCode(), $e->getMessage());
             }
 
