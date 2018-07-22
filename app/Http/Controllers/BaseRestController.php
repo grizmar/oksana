@@ -2,37 +2,56 @@
 namespace App\Http\Controllers;
 
 use App\Rest\Response\ContentInterface;
+use App\Rest\Validators\RequestValidator;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class BaseRestController extends Controller
 {
+    use RequestValidator;
+
     protected $response;
     protected $request;
-    private $validationRules = [];
 
     final public function __construct(Request $request, ContentInterface $response)
     {
         $this->response = $response;
         $this->request = $request;
-
         $this->initializeValidationRules();
+
+        //TODO перенести в обработчик ошибок
+        try{
+            $this->validate($request, $this->validationRules);
+        } catch(ValidationException $e) {
+            $errors = $e->validator->errors()->getMessages();
+
+            foreach($errors as $fieldName => $fieldMessages)
+            {
+                $this->response->setValidationErrors($fieldName, $fieldMessages);
+            }
+
+            $this->response->setStatusCode($e->status);
+        }
     }
 
-    protected function addError($code, $message): self
+    final protected function hasErrors(): bool
     {
-        $this->response->addError($code, $message);
-
-        return $this;
+        return $this->response->isValid();
     }
 
-    protected function input($key)
+    final protected function input($key)
     {
         return $this->request->input($key);
     }
 
-    protected function hasErrors(): bool
+    //TODO базовая реализация, сюда будут добавляться только основные правила валидации
+    protected function initializeValidationRules(): self
     {
-        return $this->response->hasErrors();
+        $this->validationRules = [
+            'name' => 'required|max:3|email'
+        ];
+
+        return $this;
     }
 
     //TODO пример, в будущем удалить
@@ -44,42 +63,29 @@ class BaseRestController extends Controller
     //TODO пример, в будущем удалить
     public function index()
     {
-        $this->setValidationRules(['name' => 'required']);
+        $request->toArray();
+        //$this->setValidationRules(['name' => 'required']);
         $this->response->setStatusCode(201);
         $this->response->setData([
-            'method' => 'index',
-            'name' => $this->request->input('name'),
+            'storage_path' => storage_path('Rest/hello/file.log'),
+            'app_path' => app_path('Rest/hello/file.log'),
+            'method' => 'index'
         ]);
         $this->response->addError('506', 'test');
 
         return \response()->rest($this->response);
     }
 
-    protected function initializeValidationRules(): self
+    //TODO пример
+    public function update()
     {
-        $this->validationRules = [
-            'name' => 'required',
-        ];
+        //$this->response->setStatusCode(201);
+        $this->response->setData([
+            'storage_path' => storage_path('Rest/hello/file.log'),
+            'app_path' => app_path('Rest/hello/file.log'),
+            'method' => 'index'
+        ]);
 
-        return $this;
-    }
-
-    protected function setValidationRules(array $rules): self
-    {
-        $this->validationRules = array_merge($this->validationRules, $rules);
-
-        return $this;
-    }
-
-    protected function appendValidationRule(string $key, string $rule): self
-    {
-        $currentRule = array_get($this->validationRules, $key, false);
-        $newRule = ($currentRule)
-            ? $currentRule . '|' . $rule
-            : $rule;
-
-        array_set($this->validationRules, $key, $newRule);
-
-        return $this;
+        return \response()->rest($this->response);
     }
 }

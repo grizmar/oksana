@@ -19,6 +19,16 @@ interface ContentInterface
 
     public function addError(int $code, string $message);
 
+    public function addValidationError(string $code, string $message);
+
+    public function setValidationErrors(string $code, array $messages);
+
+    public function getValidationErrors(): array;
+
+    public function hasValidationErrors(): bool;
+
+    public function isValid(): bool;
+
     public function getAnswer();
 
     public function getMap(): array;

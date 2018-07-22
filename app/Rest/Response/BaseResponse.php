@@ -9,6 +9,8 @@ class BaseResponse implements ContentInterface
 
     protected $errors = [];
 
+    protected $validationErrors = [];
+
     protected $status = HttpResponse::HTTP_OK;
 
     public function getData(): array
@@ -30,14 +32,39 @@ class BaseResponse implements ContentInterface
         return $this;
     }
 
-    public function addError(int $code, string $message): self
+    final public function addError(int $code, string $message): self
     {
         $this->errors[$code] = $message;
 
         return $this;
     }
 
-    public function getErrors(): array
+    final public function addValidationError(string $code, string $message): self
+    {
+        $this->validationErrors[$code][] = $message;
+
+        return $this;
+    }
+
+    /**
+     * @param string $code
+     * @param string[] $messages
+     *
+     * @return BaseResponse
+     */
+    final public function setValidationErrors(string $code, array $messages): self
+    {
+        $this->validationErrors[$code] = $messages;
+
+        return $this;
+    }
+
+    final public function getValidationErrors(): array
+    {
+        return $this->validationErrors;
+    }
+
+    final public function getErrors(): array
     {
         return $this->errors;
     }
@@ -47,16 +74,26 @@ class BaseResponse implements ContentInterface
         return !empty($this->errors);
     }
 
-    public function getStatusCode(): int
+    public function hasValidationErrors(): bool
+    {
+        return !empty($this->hasValidationErrors());
+    }
+
+    final public function getStatusCode(): int
     {
         return $this->status;
     }
 
-    public function setStatusCode(int $code): self
+    final public function setStatusCode(int $code): self
     {
         $this->status = $code;
 
         return $this;
+    }
+
+    final public function isValid(): bool
+    {
+        return !$this->hasErrors() && !$this->hasValidationErrors();
     }
 
     public function getAnswer()
@@ -67,9 +104,10 @@ class BaseResponse implements ContentInterface
     public function getMap(): array
     {
         return [
-            'status' => $this->getStatusCode(),
-            'errors' => $this->getErrors(),
-            'data'   => $this->data,
+            'status'            => $this->getStatusCode(),
+            'errors'            => $this->getErrors(),
+            'validation_errors' => $this->getValidationErrors(),
+            'data'              => $this->data,
         ];
     }
 }
