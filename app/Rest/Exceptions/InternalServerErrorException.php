@@ -2,12 +2,12 @@
 
 namespace App\Rest\Exceptions;
 
-use App\Rest\Base\CodeRegistry;
+use Illuminate\Http\Response;
 
-class InternalServerErrorException extends HttpException
+class InternalServerErrorException extends BaseRestException
 {
-    public static function getDefaultCode(): int
+    public function getStatusCode(): int
     {
-        return CodeRegistry::INTERNAL_SERVER_ERROR;
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 }

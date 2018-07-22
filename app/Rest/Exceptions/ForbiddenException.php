@@ -2,12 +2,12 @@
 
 namespace App\Rest\Exceptions;
 
-use App\Rest\Base\CodeRegistry;
+use Illuminate\Http\Response;
 
-class ForbiddenException extends HttpException
+class ForbiddenException extends BaseRestException
 {
-    public static function getDefaultCode(): int
+    public function getStatusCode(): int
     {
-        return CodeRegistry::FORBIDDEN;
+        return Response::HTTP_FORBIDDEN;
     }
 }

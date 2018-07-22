@@ -4,7 +4,7 @@ namespace App\Rest\Exceptions;
 
 use Illuminate\Http\Request;
 use App\Rest\Response\ContentInterface;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler
 {
@@ -16,16 +16,10 @@ class Handler
 
             $response = $e->getResponse();
 
-            if (empty($response)) {
-                $response = resolve(ContentInterface::class);
-            }
-
             if (!($e instanceof EmptyException)) {
-                $response->addError($e->getCode(), $e->getMessage());
-            }
-
-            if ($e instanceof HttpException) {
-                $response->setStatusCode($e->getCode());
+                $response
+                    ->addError($e->getCode(), $e->getMessage())
+                    ->setStatusCode($e->getStatusCode());
             }
 
         } else {
@@ -41,10 +35,10 @@ class Handler
 
         $response
             ->addError(
-                HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-                HttpResponse::$statusTexts[HttpResponse::HTTP_INTERNAL_SERVER_ERROR]
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR]
             )
-            ->setStatusCode(HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+            ->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
 
         return $response;
     }

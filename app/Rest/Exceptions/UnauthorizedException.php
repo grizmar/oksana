@@ -2,12 +2,12 @@
 
 namespace App\Rest\Exceptions;
 
-use App\Rest\Base\CodeRegistry;
+use Illuminate\Http\Response;
 
-class UnauthorizedException extends HttpException
+class UnauthorizedException extends BaseRestException
 {
-    public static function getDefaultCode(): int
+    public function getStatusCode(): int
     {
-        return CodeRegistry::UNAUTHORIZED;
+        return Response::HTTP_UNAUTHORIZED;
     }
 }

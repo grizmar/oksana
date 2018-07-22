@@ -2,23 +2,21 @@
 
 namespace App\Rest\Exceptions;
 
-use App\Rest\Base\CodeRegistry;
 use App\Rest\Base\ErrorCollection;
 use App\Rest\Response\ContentInterface;
 
-class BaseRestException extends \Exception
+abstract class BaseRestException extends \Exception
 {
     private $response;
 
-    public function create(int $code = 0, ContentInterface $response = null)
+    public function create(int $code = 0, ContentInterface $response = null): self
     {
-        $this->prepareCode($code);
-
         $this->setResponse($response);
 
+        // TODO: improve
         $message = ErrorCollection::getMessageByCode($code);
 
-        return new self($message, $code);
+        return new static($message, $code);
     }
 
     public function setResponse(ContentInterface $response): self
@@ -37,15 +35,5 @@ class BaseRestException extends \Exception
         return $this->response;
     }
 
-    public static function getDefaultCode(): int
-    {
-        return CodeRegistry::INTERNAL_SERVER_ERROR;
-    }
-
-    protected function prepareCode(int &$code): void
-    {
-        if ($code <= 0) {
-            $code = static::getDefaultCode();
-        }
-    }
+    abstract public function getStatusCode(): int;
 }
