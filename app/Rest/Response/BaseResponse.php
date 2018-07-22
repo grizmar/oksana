@@ -25,14 +25,16 @@ class BaseResponse implements ContentInterface
         return $this;
     }
 
-    public function addData(string $code, $value): self
-    {
-        array_add($this->data, $code, $value);
-    }
-
     public function pushData(array $data): self
     {
         $this->data = array_merge($this->data, $data);
+
+        return $this;
+    }
+
+    public function addParam(string $code, $value): self
+    {
+        array_set($this->data, $code, $value);
 
         return $this;
     }

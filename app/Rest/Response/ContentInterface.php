@@ -7,7 +7,7 @@ interface ContentInterface
 
     public function setData(array $data);
 
-    public function addData(string $code, $value);
+    public function addParam(string $code, $value);
 
     public function pushData(array $data);
 
