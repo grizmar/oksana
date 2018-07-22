@@ -55,20 +55,20 @@ class Handler extends ExceptionHandler
         //TODO нужно либо сделать возфможность переопределять Handler либо вынести обработку ошибок api в отдельный
         // класс
 
-        $response = resolve(ContentInterface::class);
-        if ($exception instanceof NotFoundException) {
-            $response
-                ->addError($exception->getCode(), $exception->getMessage())
-                ->setStatusCode(HttpResponse::HTTP_NOT_FOUND);
-
-            return response()->rest($response);
-        } elseif($exception instanceof \Exception) {
-            $response
-                ->addError(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, HttpResponse::$statusTexts[HttpResponse::HTTP_INTERNAL_SERVER_ERROR])
-                ->setStatusCode(HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
-
-            return response()->rest($response);
-        }
+        //$response = resolve(ContentInterface::class);
+        //if ($exception instanceof NotFoundException) {
+        //    $response
+        //        ->addError($exception->getCode(), $exception->getMessage())
+        //        ->setStatusCode(HttpResponse::HTTP_NOT_FOUND);
+        //
+        //    return response()->rest($response);
+        //} elseif($exception instanceof \Exception) {
+        //    $response
+        //        ->addError(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, HttpResponse::$statusTexts[HttpResponse::HTTP_INTERNAL_SERVER_ERROR])
+        //        ->setStatusCode(HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+        //
+        //    return response()->rest($response);
+        //}
 
 
         return parent::render($request, $exception);

@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Exceptions\NotFoundException;
-use App\Rest\Response\Response;
+use App\Rest\Response\JsonResponse;
 use Closure;
 
 class BaseRestMiddleware

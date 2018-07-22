@@ -16,10 +16,8 @@ trait Singleton
     final private function __clone(){}
     final private function __wakeup(){}
 
-    public static function getInstance()
+    public static function getInstance(): self
     {
-        return (self::$instance === null)
-            ? self::$instance = new self()
-            : self::$instance;
+        return self::$instance ?? self::$instance = new self();
     }
 }
