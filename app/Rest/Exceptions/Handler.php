@@ -29,15 +29,23 @@ class Handler
             }
 
         } else {
-            $response = resolve(ContentInterface::class);
-            $response
-                ->addError(
-                    HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
-                    HttpResponse::$statusTexts[HttpResponse::HTTP_INTERNAL_SERVER_ERROR]
-                )
-                ->setStatusCode(HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $response = self::getInternalErrorResponse();
         }
 
         return response()->rest($response);
+    }
+
+    private static function getInternalErrorResponse(): ContentInterface
+    {
+        $response = resolve(ContentInterface::class);
+
+        $response
+            ->addError(
+                HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+                HttpResponse::$statusTexts[HttpResponse::HTTP_INTERNAL_SERVER_ERROR]
+            )
+            ->setStatusCode(HttpResponse::HTTP_INTERNAL_SERVER_ERROR);
+
+        return $response;
     }
 }
