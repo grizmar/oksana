@@ -5,5 +5,5 @@
  */
 
 return [
-    'validation_error' => 'Validation error',
+    'default' => 'Service temporary unavailable',
 ];

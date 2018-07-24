@@ -2,21 +2,26 @@
 
 namespace App\Rest\Exceptions;
 
-use App\Rest\Base\ErrorCollection;
+use App\Rest\Messages\Manager;
 use App\Rest\Response\ContentInterface;
 
 abstract class BaseRestException extends \Exception
 {
     private $response;
 
-    public function create(int $code = 0, ContentInterface $response = null): self
+    public static function create($code = 0, array $context = [], ContentInterface $response = null): self
     {
-        $this->setResponse($response);
+        $message = Manager::getMessage($code, $context);
 
-        // TODO: improve
-        $message = ErrorCollection::getMessageByCode($code);
+        // TODO: log error
 
-        return new static($message, $code);
+        $instance = (new static($message, $code));
+
+        if (!empty($response)) {
+            $instance->setResponse($response);
+        }
+
+        return $instance;
     }
 
     public function setResponse(ContentInterface $response): self
