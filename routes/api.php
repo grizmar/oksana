@@ -26,7 +26,7 @@ Route::group(
     function() {
         Route::resource(
             '/test',
-            'BaseRestController',
+            'TestController',
             [
                 'only'  => ['show', 'index', 'update'],
                 'names' => [
