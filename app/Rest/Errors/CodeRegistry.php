@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rest\Messages;
+namespace App\Rest\Errors;
 
 
 class CodeRegistry
