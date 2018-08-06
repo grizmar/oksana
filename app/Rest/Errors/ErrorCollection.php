@@ -2,6 +2,7 @@
 
 namespace App\Rest\Errors;
 
+use Grizmar\Api\Messages\BaseCollection;
 
 class ErrorCollection extends BaseCollection
 {

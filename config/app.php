@@ -177,11 +177,13 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // TODO: временное подключение для тестирования
+        Grizmar\Api\ApiServiceProvider::class,
+
         /*
          * Rest Service Providers
          */
-        \App\Providers\RestResponseServiceProvider::class
-
+        App\Rest\Providers\RestServiceProvider::class,
     ],
 
     /*
