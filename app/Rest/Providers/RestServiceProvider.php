@@ -3,26 +3,16 @@
 namespace App\Rest\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Grizmar\Api\Messages\Keeper;
+use Grizmar\Api\Messages\KeeperInterface;
 use App\Rest\Errors\ErrorCollection;
 
 class RestServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(KeeperInterface $keeper)
     {
-        Keeper::load(new ErrorCollection());
+        $keeper->load(new ErrorCollection());
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
     public function register()
     {
         //
