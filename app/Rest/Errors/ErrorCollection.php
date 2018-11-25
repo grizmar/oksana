@@ -10,7 +10,7 @@ class ErrorCollection extends BaseCollection
     {
         $this->addMessages([
             'default' => __('api.default'), // lang example
-            CodeRegistry::USER_NOT_FOUND => 'User not found',
+            CodeRegistry::USER_NOT_FOUND => 'User not found: :name!',
         ]);
     }
 }

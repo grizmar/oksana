@@ -3,38 +3,30 @@
 namespace App\Http\Controllers;
 
 use Grizmar\Api\Controllers\BaseController;
+use Grizmar\Api\Http\Exceptions\UnauthorizedException;
 
 class TestController extends BaseController
 {
+    protected function initValidationRules(): array
+    {
+        return [
+            'index' => [
+                'name' => 'required',
+            ],
+        ];
+    }
+
     public function show()
     {
-        $this->response->addParam('CustomerData.Test', '1');
-
         return \response()->rest($this->response);
     }
 
     public function index()
     {
-        //$this->setValidationRules(['name' => 'required']);
-        $this->response->setStatusCode(201);
-        $this->response->setData([
-            'storage_path' => storage_path('Rest/hello/file.log'),
-            'app_path' => app_path('Rest/hello/file.log'),
-            'method' => 'index'
-        ]);
-        $this->response->addError('506', 'test');
+        $this->output('level1.level2.info', 'I\'m data!');
 
-        return \response()->rest($this->response);
-    }
-
-    public function update()
-    {
-        //$this->response->setStatusCode(201);
-        $this->response->setData([
-            'storage_path' => storage_path('Rest/hello/file.log'),
-            'app_path' => app_path('Rest/hello/file.log'),
-            'method' => 'index'
-        ]);
+        throw UnauthorizedException::make(1000, ['name' => $this->input('name', 'Unknown')])
+            ->setResponse($this->response);
 
         return \response()->rest($this->response);
     }
