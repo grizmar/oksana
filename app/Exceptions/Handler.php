@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Grizmar\Api\Exceptions\Handler as RestHandler;
+use Grizmar\Api\Handlers\HandlerInterface;
 
 class Handler extends ExceptionHandler
 {
@@ -50,7 +50,8 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($request->is('api/*')) {
-            return RestHandler::render($request, $exception);
+            return resolve(HandlerInterface::class)
+                ->handle($exception, $request);
         }
 
         return parent::render($request, $exception);
