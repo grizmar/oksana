@@ -179,11 +179,6 @@ return [
 
         // TODO: временное подключение для тестирования
         Elantha\Api\Providers\ApiServiceProvider::class,
-
-        /*
-         * Rest Service Providers
-         */
-        App\Rest\Providers\RestServiceProvider::class,
     ],
 
     /*
