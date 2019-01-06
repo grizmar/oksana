@@ -3,7 +3,7 @@
 namespace App\Rest\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Grizmar\Api\Messages\KeeperInterface;
+use Elantha\Api\Messages\KeeperInterface;
 use App\Rest\Errors\ErrorCollection;
 
 class RestServiceProvider extends ServiceProvider

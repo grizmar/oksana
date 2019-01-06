@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Grizmar\Api\Handlers\HandlerInterface;
+use Elantha\Api\Handlers\HandlerInterface;
 
 class Handler extends ExceptionHandler
 {
