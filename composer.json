@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "fideloper/proxy": "~3.3",
-        "grizmar/api": "@dev",
+        "elantha/api": "@dev",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0"
     },
@@ -55,9 +55,9 @@
         "optimize-autoloader": true
     },
     "repositories": {
-        "grizmar/api": {
+        "elantha/api": {
             "type": "path",
-            "url": "packages/grizmar/api",
+            "url": "packages/elantha/api",
             "options": {
                 "symlink": true
             }

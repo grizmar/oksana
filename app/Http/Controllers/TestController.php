@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Grizmar\Api\Controllers\BaseController;
-use Grizmar\Api\Http\Exceptions\UnauthorizedException;
+use Elantha\Api\Controllers\BaseController;
+use Elantha\Api\Http\Exceptions\UnauthorizedException;
 
 class TestController extends BaseController
 {
