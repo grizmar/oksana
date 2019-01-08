@@ -30,4 +30,14 @@ class TestController extends BaseController
 
         return \response()->rest($this->response);
     }
+
+    public function update()
+    {
+        $this->output('result', 'Data stored!');
+
+        throw UnauthorizedException::make(1000, ['name' => $this->input('name', 'Unknown')])
+            ->setResponse($this->response);
+
+        return \response()->rest($this->response);
+    }
 }
