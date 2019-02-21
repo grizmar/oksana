@@ -43,6 +43,8 @@ case ${!OPTIND} in
        cleanvol) docker volume ls -q | xargs docker volume rm; exit 0 ;;
           shell) $WINPTY docker-compose exec "${CMD_ARG:-main}" bash; exit 0 ;;
        composer) $WINPTY docker-compose exec -T main bash -c "cd /var/www/oxana ; composer ${CMD_ARG:-install}"; exit 0 ;;
+        artisan) $WINPTY docker-compose exec -T main bash -c "cd /var/www/oxana ; php artisan $CMD_ARG"; exit 0 ;;
+       testdata) $WINPTY docker-compose exec -T main bash -c "cd /var/www/oxana ; php artisan testdata:insert"; exit 0 ;;
              '') ;;
               *) echo "Invalid command '${!OPTIND}'"; exit 1 ;;
 
