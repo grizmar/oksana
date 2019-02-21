@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "51d112ad3977c0b90f17dccb598db6d4",
+    "content-hash": "343d6166362a7fc169da31c083c4bf6e",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -265,6 +265,55 @@
                 "validator"
             ],
             "time": "2018-12-04T22:38:24+00:00"
+        },
+        {
+            "name": "elantha/api",
+            "version": "dev-feature/invokable_strategy",
+            "dist": {
+                "type": "path",
+                "url": "packages/elantha/api",
+                "reference": "2f400679795d96c6635b1a8a551ba544851d6e22"
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "spatie/array-to-xml": "^2.7"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "installer-paths": {
+                    "packages/{$name}": [
+                        "elantha/api"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Elantha\\Api\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Elantha\\Api\\Tests\\": "tests"
+                }
+            },
+            "authors": [
+                {
+                    "name": "grizmar",
+                    "email": "grizmar5@gmail.com"
+                },
+                {
+                    "name": "solravn",
+                    "email": "elanthes@gmail.com"
+                }
+            ],
+            "description": "rest api",
+            "transport-options": {
+                "symlink": true
+            }
         },
         {
             "name": "erusev/parsedown",
@@ -639,16 +688,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.7.26",
+            "version": "v5.7.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "ca3bc9769969e8af3bd9878a3e0242051c74dae4"
+                "reference": "688fbfa889d43f392825b381ad3981847120fdfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/ca3bc9769969e8af3bd9878a3e0242051c74dae4",
-                "reference": "ca3bc9769969e8af3bd9878a3e0242051c74dae4",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/688fbfa889d43f392825b381ad3981847120fdfa",
+                "reference": "688fbfa889d43f392825b381ad3981847120fdfa",
                 "shasum": ""
             },
             "require": {
@@ -781,7 +830,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2019-02-12T14:52:21+00:00"
+            "time": "2019-02-19T14:37:47+00:00"
         },
         {
             "name": "laravel/nexmo-notification-channel",
@@ -1998,6 +2047,55 @@
                 "uuid"
             ],
             "time": "2018-07-19T23:38:55+00:00"
+        },
+        {
+            "name": "spatie/array-to-xml",
+            "version": "2.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/array-to-xml.git",
+                "reference": "c7dc15c460eeaf0fa8f8f2d0606155d48f93a9bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/array-to-xml/zipball/c7dc15c460eeaf0fa8f8f2d0606155d48f93a9bd",
+                "reference": "c7dc15c460eeaf0fa8f8f2d0606155d48f93a9bd",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^6.3",
+                "spatie/phpunit-snapshot-assertions": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\ArrayToXml\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://murze.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Convert an array to xml",
+            "homepage": "https://github.com/spatie/array-to-xml",
+            "keywords": [
+                "array",
+                "convert",
+                "xml"
+            ],
+            "time": "2018-11-29T16:24:53+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -4863,7 +4961,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "elantha/api": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
