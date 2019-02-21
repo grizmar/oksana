@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  nginx:
+    build: etc/docker/build/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./etc/docker/config/nginx/conf.d:/etc/nginx/conf.d
+      - ./:/var/www/oxana
+      - ./var/log/nginx:/var/log/nginx/
+    links:
+      - main
+
+  postgres:
+    build: etc/docker/build/postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - "./etc/dist/postgres:/var/lib/postgresql/data"
+
+  main:
+    build: etc/docker/build/php
+    volumes:
+      - ./:/var/www/oxana
+      - ./var/log/php:/var/log/php/
+      - ./etc/dist/profile:/root:delegated
+      - ./etc/docker/config/profile/.bashrc:/root/.bashrc
+    links:
+      - postgres
