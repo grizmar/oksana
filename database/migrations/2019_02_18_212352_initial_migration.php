@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Model\Notification;
 
 class InitialMigration extends Migration
 {
@@ -15,9 +16,9 @@ class InitialMigration extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('name')->nullable();
+            $table->string('password')->nullable();
             $table->boolean('active')->default(false);
             $table->rememberToken();
             $table->timestamps();
@@ -61,7 +62,7 @@ class InitialMigration extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id');
@@ -73,6 +74,29 @@ class InitialMigration extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('rating_id')->references('id')->on('ratings');
         });
+
+        Schema::create('estimates', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('review_id');
+            $table->unsignedInteger('user_id');
+            $table->boolean('value');
+            $table->timestamps();
+
+            $table->foreign('review_id')->references('id')->on('reviews');
+            $table->foreign('user_id')->references('id')->on('users');
+        });
+
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->increments('id');
+            $table->enum('type', [Notification::TYPE_MESSAGE, Notification::TYPE_ESTIMATE]);
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('estimate_id')->nullable();
+            $table->longText('content')->nullable();
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('estimate_id')->references('id')->on('estimates');
+        });
     }
 
     /**
@@ -82,7 +106,9 @@ class InitialMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('estimates');
+        Schema::dropIfExists('reviews');
         Schema::dropIfExists('ratings');
         Schema::dropIfExists('search_history');
         Schema::dropIfExists('products');

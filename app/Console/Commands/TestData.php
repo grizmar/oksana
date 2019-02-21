@@ -1,21 +1,34 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
+namespace App\Console\Commands;
+
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
+use App\Model\Notification;
 
-/**
- * Class CreateTestData
- * TODO delete before production
- */
-class CreateTestData extends Migration
+class TestData extends Command
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    protected $signature = 'testdata:insert';
+    protected $description = 'Create test data';
+
+    public function handle()
+    {
+        DB::beginTransaction();
+
+        try
+        {
+            $this->insertTestData();
+            DB::commit();
+        }
+        catch (\Exception $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    private function insertTestData()
     {
         $users = [
             [
@@ -70,7 +83,7 @@ class CreateTestData extends Migration
             ],
             [
                 'product_id' => $productIds[0],
-                'user_id'    => $userIds[1],
+                'user_id'    => $userIds[0],
                 'value'      => 1,
             ],
         ];
@@ -90,7 +103,7 @@ class CreateTestData extends Migration
 
         $this->insertItems(DB::table('search_history'), $historyItems);
 
-        $comments = [
+        $reviews = [
             [
                 'product_id' => $productIds[0],
                 'user_id'    => $userIds[0],
@@ -105,7 +118,43 @@ class CreateTestData extends Migration
             ],
         ];
 
-        $this->insertItems(DB::table('comments'), $comments);
+        $reviewItems = $this->insertItems(DB::table('reviews'), $reviews);
+
+        $estimates = [
+            [
+                'review_id' => $reviewItems[1],
+                'user_id'   => $userIds[0],
+                'value'     => true,
+            ],
+            [
+                'review_id' => $reviewItems[0],
+                'user_id'   => $userIds[1],
+                'value'     => false,
+            ],
+        ];
+
+        $estimateItems = $this->insertItems(DB::table('estimates'), $estimates);
+
+        $notifications = [
+            [
+                'type'        => Notification::TYPE_ESTIMATE,
+                'user_id'     => $userIds[1],
+                'estimate_id' => $estimateItems[0],
+            ],
+            [
+                'type'        => Notification::TYPE_ESTIMATE,
+                'user_id'     => $userIds[0],
+                'estimate_id' => $estimateItems[1],
+            ],
+            [
+                'type'        => Notification::TYPE_ESTIMATE,
+                'user_id'     => $userIds[0],
+                'estimate_id' => $estimateItems[1],
+                'content'     => 'Ty pidor!',
+            ],
+        ];
+
+        $this->insertItems(DB::table('notifications'), $notifications);
     }
 
     private function insertItems(Builder $table, array $items): array
@@ -113,19 +162,11 @@ class CreateTestData extends Migration
         $result = [];
 
         foreach ($items as $item) {
+            $item['created_at'] = now();
+            $item['updated_at'] = now();
             $result[] = $table->insertGetId($item);
         }
 
         return $result;
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-
     }
 }
