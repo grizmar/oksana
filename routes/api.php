@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,26 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+/*
+    GET	        /photos	                index	    photos.index
+    GET	        /photos/create	        create	    photos.create
+    POST	    /photos	                store	    photos.store
+    GET	        /photos/{photo}         show	    photos.show
+    GET	        /photos/{photo}/edit	edit	    photos.edit
+    PUT/PATCH   /photos/{photo}	        update	    photos.update
+    DELETE	    /photos/{photo}	        destroy	    photos.destroy
+*/
+Route::group(
+    [
+        'prefix' => 'v1',
+    ],
+    function() {
+        Route::resource(
+            '/products',
+            'Rest\ProductController',
+            [
+                'only' => ['index', 'show', 'store', 'update'],
+            ]
+        );
+    }
+);
